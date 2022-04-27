@@ -1,32 +1,97 @@
-import React, { useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Container } from "../../components/layouts/container/Container.component";
-import { string } from "yup";
-const state = { username: "", password: "" };
 
-const Auth = () => {
+interface Props {
+  initialValidate?: boolean;
+}
+
+const Auth: FC<Props> = ({ initialValidate }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const onSetUsername = (text: string) => {
-    state.username = text;
-  };
-  const onSetPassword = (text: string) => {
-    state.password = text;
-  };
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [usernameTouched, setUsernameTouched] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
+
+  const validate = (value: string) => value.length > 4 && value.length <= 10;
+
+  useEffect(() => {
+    if (initialValidate) {
+      setUsernameError(validate(username) ? "" : "Error username length");
+      setPasswordError(validate(password) ? "" : "Error username length");
+    }
+
+    return () => {
+      setUsernameError("");
+      setPasswordError("");
+    };
+  }, []);
+
+  const onSetUsername = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+
+      setUsernameError(validate(value) ? "" : "Error username length");
+
+      setUsername(event.target.value);
+    },
+    [],
+  );
+
+  const onSetPassword = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+
+      setPasswordError(validate(value) ? "" : "Error username length");
+
+      setPassword(event.target.value);
+    },
+    [],
+  );
+  const onClick = useCallback(() => {
+    setUsernameTouched(true);
+    setPasswordTouched(true);
+    setUsernameError(validate(username) ? "" : "Error username length");
+    setPasswordError(validate(password) ? "" : "Error username length");
+    if (!usernameError && !passwordError) {
+      console.log("VALUES", { username, password });
+    }
+  }, [username, password, usernameError, passwordError]);
+
+  const onUsernameBlur = useCallback(() => {
+    setUsernameTouched(true);
+  }, []);
+  const onPasswordBlur = useCallback(() => {
+    setPasswordTouched(true);
+  }, []);
 
   return (
     <Container>
       <Wrapper>
         <AuthWrap>
           <Title>{"Авторизация"}</Title>
+
           <Row>
             <Label>{"Логин"}</Label>
-            <Input />
+            <Input
+              value={username}
+              onChange={onSetUsername}
+              onBlur={onUsernameBlur}
+            />
+            <Error>{usernameTouched && usernameError}</Error>
           </Row>
           <Row>
             <Label>{"Пароль"}</Label>
-            <Input />
+            <Input
+              value={password}
+              onChange={onSetPassword}
+              onBlur={onPasswordBlur}
+            />
+            <Error>{passwordTouched && passwordError}</Error>
           </Row>
+          <br />
+          <button onClick={onClick}>{"Войти"}</button>
         </AuthWrap>
       </Wrapper>
     </Container>
@@ -51,4 +116,7 @@ const Wrapper = styled.div`
 const Title = styled.div``;
 const Row = styled.div``;
 const Label = styled.div``;
+const Error = styled.div`
+  color: red;
+`;
 const Input = styled.input``;

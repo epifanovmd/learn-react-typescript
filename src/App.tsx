@@ -3,7 +3,8 @@ import Auth from "./pages/auth/Auth.component";
 
 const App = () => (
   <div>
-    <Auth />
+    <Auth initialValidate={true} />
+    {/* <Auth initialValidate={false} />*/}
   </div>
 );
 
