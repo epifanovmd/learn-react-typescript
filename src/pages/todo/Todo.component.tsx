@@ -3,6 +3,4 @@ import { Container } from "../../components/layouts/container/Container.componen
 
 interface IProps {}
 
-export const Registration: FC<IProps> = ({}) => (
-  <Container>{"Registration page"}</Container>
-);
+export const Todo: FC<IProps> = ({}) => <Container>{"Todo page"}</Container>;

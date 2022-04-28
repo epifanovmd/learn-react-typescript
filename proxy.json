@@ -1,7 +1,6 @@
 {
   "/api": {
-    "target": "http://jsonplaceholder.typicode.com/",
-    "pathRewrite": {"^/api": "/"},
+    "target": "http://test.epifanov-it.ru/",
     "changeOrigin": true
   }
 }
