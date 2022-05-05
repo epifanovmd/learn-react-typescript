@@ -1,46 +1,21 @@
 import React from "react";
-import Auth from "./pages/auth/Auth.component";
-import { Route, Switch } from "react-router";
-import { BrowserRouter } from "react-router-dom";
-import { Registration } from "./pages/registration/Registration.compontent";
-import { Todo } from "./pages/todo/Todo.component";
-import { useCookies } from "react-cookie";
-import { initStore } from "./store/store";
+import { CounterContext, initStore, useInitSore } from "./store/store";
 import { Provider } from "react-redux";
+import { Registration } from "./pages/registration/Registration.compontent";
 
 const store = initStore();
 
 const App = () => {
-  const [cookies] = useCookies();
+  const contextStore = useInitSore();
 
   return (
     <div>
-      <BrowserRouter>
+      <CounterContext.Provider value={contextStore}>
         <Provider store={store}>
-          <Switch>
-            {!cookies.token && (
-              <Route
-                path={"/"}
-                render={() => <Auth initialValidate={true} />}
-                exact={true}
-              />
-            )}
-
-            {cookies.token && (
-              <>
-                <Route path={"/"} component={Todo} exact={true} />
-                <Route
-                  path={"/registration"}
-                  component={Registration}
-                  exact={true}
-                />
-              </>
-            )}
-
-            {/* <Redirect from={"*"} to={"/"} />*/}
-          </Switch>
+          {/* <Auth initialValidate={true} />*/}
+          <Registration />
         </Provider>
-      </BrowserRouter>
+      </CounterContext.Provider>
     </div>
   );
 };

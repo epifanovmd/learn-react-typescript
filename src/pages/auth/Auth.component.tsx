@@ -17,9 +17,10 @@ const Auth: FC<Props> = ({ initialValidate }) => {
   const [usernameTouched, setUsernameTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
 
-  // const auth = useSelector(state => state);
+  const auth = useSelector(state => state);
 
-  // console.log("auth", auth);
+  //
+  console.log("auth", auth);
 
   const validate = (value: string) => value.length > 4 && value.length <= 10;
 

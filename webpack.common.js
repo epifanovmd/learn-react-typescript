@@ -8,9 +8,7 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 
-const alias = {
-  "react-dom": "@hot-loader/react-dom",
-};
+const alias = {};
 
 const loaders = IS_SSR => ({
   ts: {
