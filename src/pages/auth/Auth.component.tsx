@@ -2,7 +2,9 @@ import React, { FC, useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Container } from "../../components/layouts/container/Container.component";
 import { baseFetch } from "../../api/baseFetch";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { AuthSelectors } from "./Auth.selectors";
+import { authActionResult } from "./Auth.actions";
 
 interface Props {
   initialValidate?: boolean;
@@ -17,10 +19,11 @@ const Auth: FC<Props> = ({ initialValidate }) => {
   const [usernameTouched, setUsernameTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
 
-  const auth = useSelector(state => state);
+  const authState = useSelector(AuthSelectors.authState);
+  const dispatch = useDispatch();
 
   //
-  console.log("auth", auth);
+  console.log("authState in component", authState);
 
   const validate = (value: string) => value.length > 4 && value.length <= 10;
 
@@ -60,18 +63,21 @@ const Auth: FC<Props> = ({ initialValidate }) => {
 
   const onSubmit = useCallback(
     async ({ username, password }: { username: string; password: string }) => {
+      dispatch(authActionResult.started());
       const res = await baseFetch("/api/auth/login", "POST", {
         username,
         password,
       }).catch(e => {
         setServerError(e.message);
+        dispatch(authActionResult.failed(e.message));
       });
 
       if (res) {
         console.log("res", res);
+        dispatch(authActionResult.done(res));
       }
     },
-    [],
+    [dispatch],
   );
 
   const onClick = useCallback(() => {
@@ -119,6 +125,7 @@ const Auth: FC<Props> = ({ initialValidate }) => {
           </Row>
           <br />
           <div>{serverError}</div>
+          <div>{authState.loading ? "Загрузка" : null}</div>
           <button onClick={onClick}>{"Войти"}</button>
         </AuthWrap>
       </Wrapper>

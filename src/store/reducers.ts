@@ -1,39 +1,7 @@
-import { Action } from "redux";
-
-const initialAuthState: any = {};
-const initialCounterState: any = {
-  count: 0,
-};
-
-// reducer
-const authState = (state: any = initialAuthState, action: Action) => {
-  switch (action.type) {
-    case "AUTH/LOGIN": {
-      console.log("LOGIN SUCCESS");
-      break;
-    }
-
-    default:
-      return state;
-  }
-};
-
-const counterState = (state: any = initialCounterState, action: Action) => {
-  switch (action.type) {
-    case "AUTH/LOGIN": {
-      console.log("LOGIN SUCCESS");
-      break;
-    }
-
-    default:
-      return state;
-  }
-};
+import { counterState } from "../pages/testStore/TestStore.reducer";
+import { authState } from "../pages/auth/Auth.reducer";
 
 export const reducers = { authState, counterState };
-
-// Action
-const authActionResult = { type: "AUTH/LOGIN", data1: { test: "fadsfsdgs" } };
 
 // // Redux: Хранилище глобальное
 // //
