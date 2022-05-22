@@ -5,6 +5,7 @@ import { baseFetch } from "../../api/baseFetch";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthSelectors } from "./Auth.selectors";
 import { authActionResult } from "./Auth.actions";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   initialValidate?: boolean;
@@ -22,9 +23,7 @@ const Auth: FC<Props> = ({ initialValidate }) => {
   const authState = useSelector(AuthSelectors.authState);
   const dispatch = useDispatch();
 
-  //
-  console.log("authState in component", authState);
-
+  const navigate = useNavigate();
   const validate = (value: string) => value.length > 4 && value.length <= 10;
 
   useEffect(() => {
@@ -73,11 +72,11 @@ const Auth: FC<Props> = ({ initialValidate }) => {
       });
 
       if (res) {
-        console.log("res", res);
+        navigate("/todo");
         dispatch(authActionResult.done(res));
       }
     },
-    [dispatch],
+    [dispatch, navigate],
   );
 
   const onClick = useCallback(() => {
@@ -87,7 +86,6 @@ const Auth: FC<Props> = ({ initialValidate }) => {
     setPasswordError(validate(password) ? "" : "Error username length");
     if (!usernameError && !passwordError) {
       onSubmit({ username, password });
-      console.log("VALUES", { username, password });
     }
   }, [username, password, usernameError, passwordError, onSubmit]);
 
@@ -97,6 +95,10 @@ const Auth: FC<Props> = ({ initialValidate }) => {
   const onPasswordBlur = useCallback(() => {
     setPasswordTouched(true);
   }, []);
+
+  const handleClick = () => {
+    navigate("/registration");
+  };
 
   return (
     <Container>
@@ -127,6 +129,12 @@ const Auth: FC<Props> = ({ initialValidate }) => {
           <div>{serverError}</div>
           <div>{authState.loading ? "Загрузка" : null}</div>
           <button onClick={onClick}>{"Войти"}</button>
+          <RegistrationWrap>
+            <p>Нет аккаунта?</p>
+            <RegistrationButton onClick={handleClick}>
+              {"Зарегистрируйся"}
+            </RegistrationButton>
+          </RegistrationWrap>
         </AuthWrap>
       </Wrapper>
     </Container>
@@ -155,3 +163,19 @@ const Error = styled.div`
   color: red;
 `;
 const Input = styled.input``;
+
+const RegistrationWrap = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const RegistrationButton = styled.button`
+  border: none;
+  text-decoration: none;
+  color: red;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-block;
+  background-color: white;
+`;

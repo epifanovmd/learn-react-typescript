@@ -3,7 +3,6 @@ const initialCounterState: any = {
 };
 
 export const counterState = (state: any = initialCounterState, action: any) => {
-  console.log("counterState", action);
   switch (action.type) {
     case "COUNTER/UPPER": {
       const newState = { ...state, count: state.count + 1 };

@@ -8,15 +8,11 @@ const initialAuthState: any = {
 
 export const authState = reducerWithInitialState(initialAuthState)
   .case(authActionResult.started, state => ({ ...state, loading: true }))
-  .case(authActionResult.done, (state, payload: any) => {
-    console.log("payload", payload);
-
-    return {
-      ...state,
-      ...payload,
-      loading: false,
-    };
-  })
+  .case(authActionResult.done, (state, payload: any) => ({
+    ...state,
+    ...payload,
+    loading: false,
+  }))
   .case(authActionResult.failed, (state, payload: any) => ({
     ...state,
     loading: false,

@@ -3,12 +3,17 @@ import "./assets/global.scss";
 import { createRoot } from "react-dom/client";
 
 import App from "./App";
+import { CustomRouter } from "./components/CustomRouter/CustomRouter";
 
 const renderApp = (Comp?: any) => {
   const container = document.getElementById("root");
   const root = createRoot(container!);
 
-  root.render(<Comp />);
+  root.render(
+    <CustomRouter>
+      <Comp />
+    </CustomRouter>,
+  );
 };
 
 renderApp(App);
