@@ -1,22 +1,7 @@
 import React from "react";
-import { CounterContext, initStore, useInitSore } from "./store/store";
-import { Provider } from "react-redux";
-import Auth from "./pages/auth/Auth.component";
+import { initStore } from "./store/store";
+import { TestComponent } from "./components/tesstComponent";
 
-const store = initStore();
-
-const App = () => {
-  const contextStore = useInitSore();
-
-  return (
-    <div>
-      <CounterContext.Provider value={contextStore}>
-        <Provider store={store}>
-          <Auth initialValidate={true} />
-        </Provider>
-      </CounterContext.Provider>
-    </div>
-  );
-};
+const App = () => <TestComponent />;
 
 export default App;

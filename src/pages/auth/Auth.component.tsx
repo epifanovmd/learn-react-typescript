@@ -10,14 +10,10 @@ interface Props {
   initialValidate?: boolean;
 }
 
-const Auth: FC<Props> = ({ initialValidate }) => {
+const Auth: FC<Props> = () => {
   const [serverError, setServerError] = useState("");
   const [username, setUsername] = useState("username");
   const [password, setPassword] = useState("12345");
-  const [usernameError, setUsernameError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [usernameTouched, setUsernameTouched] = useState(false);
-  const [passwordTouched, setPasswordTouched] = useState(false);
 
   const authState = useSelector(AuthSelectors.authState);
   const dispatch = useDispatch();
@@ -25,26 +21,8 @@ const Auth: FC<Props> = ({ initialValidate }) => {
   //
   console.log("authState in component", authState);
 
-  const validate = (value: string) => value.length > 4 && value.length <= 10;
-
-  useEffect(() => {
-    if (initialValidate) {
-      setUsernameError(validate(username) ? "" : "Error username length");
-      setPasswordError(validate(password) ? "" : "Error username length");
-    }
-
-    return () => {
-      setUsernameError("");
-      setPasswordError("");
-    };
-  }, []);
-
   const onSetUsername = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-
-      setUsernameError(validate(value) ? "" : "Error username length");
-
       setUsername(event.target.value);
     },
     [],
@@ -52,10 +30,6 @@ const Auth: FC<Props> = ({ initialValidate }) => {
 
   const onSetPassword = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-
-      setPasswordError(validate(value) ? "" : "Error username length");
-
       setPassword(event.target.value);
     },
     [],
@@ -81,22 +55,8 @@ const Auth: FC<Props> = ({ initialValidate }) => {
   );
 
   const onClick = useCallback(() => {
-    setUsernameTouched(true);
-    setPasswordTouched(true);
-    setUsernameError(validate(username) ? "" : "Error username length");
-    setPasswordError(validate(password) ? "" : "Error username length");
-    if (!usernameError && !passwordError) {
-      onSubmit({ username, password });
-      console.log("VALUES", { username, password });
-    }
-  }, [username, password, usernameError, passwordError, onSubmit]);
-
-  const onUsernameBlur = useCallback(() => {
-    setUsernameTouched(true);
-  }, []);
-  const onPasswordBlur = useCallback(() => {
-    setPasswordTouched(true);
-  }, []);
+    onSubmit({ username, password });
+  }, [username, password, onSubmit]);
 
   return (
     <Container>
@@ -107,21 +67,11 @@ const Auth: FC<Props> = ({ initialValidate }) => {
 
           <Row>
             <Label>{"Логин"}</Label>
-            <Input
-              value={username}
-              onChange={onSetUsername}
-              onBlur={onUsernameBlur}
-            />
-            <Error>{usernameTouched && usernameError}</Error>
+            <Input value={username} onChange={onSetUsername} />
           </Row>
           <Row>
             <Label>{"Пароль"}</Label>
-            <Input
-              value={password}
-              onChange={onSetPassword}
-              onBlur={onPasswordBlur}
-            />
-            <Error>{passwordTouched && passwordError}</Error>
+            <Input value={password} onChange={onSetPassword} />
           </Row>
           <br />
           <div>{serverError}</div>

@@ -13,7 +13,7 @@ export const baseFetch = async (
 
   if (method === "GET") {
     resultUrl += queryString.stringify(params);
-  } // '/api/users?page=1&size=12'
+  }
 
   const res = await fetch(resultUrl, {
     headers,
